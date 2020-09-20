@@ -1,0 +1,19 @@
+os:
+  - linux
+
+language: php
+
+php:
+  - '7.4'
+
+before_install:
+  - composer self-update
+  - composer validate
+  - yes '' | pecl install -f apcu
+  - yes '' | pecl install -f bz2
+
+install:
+  - composer install --prefer-dist
+
+script:
+  - composer coffeephp:exec:analyse
