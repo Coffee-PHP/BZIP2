@@ -45,9 +45,7 @@ use function bzdecompress;
 use function bzopen;
 use function bzread;
 use function bzwrite;
-use function is_file;
 use function is_string;
-use function unlink;
 
 /**
  * Class Bzip2CompressionMethod
@@ -274,8 +272,8 @@ final class Bzip2CompressionMethod extends AbstractCompressionMethod implements 
             if (isset($bzip2Stream) && $bzip2Stream !== false) { // @phpstan-ignore-line
                 bzclose($bzip2Stream);
                 unset($bzip2Stream);
-                if (is_file((string)$destination)) {
-                    unlink((string)$destination);
+                if ($destination->exists()) {
+                    $this->fileManager->getPath($destination)->delete();
                 }
             }
         }
@@ -347,8 +345,8 @@ final class Bzip2CompressionMethod extends AbstractCompressionMethod implements 
             if (isset($fileStream) && $fileStream->isOpen()) { // @phpstan-ignore-line
                 $fileStream->close();
                 unset($fileStream);
-                if (is_file((string)$destination)) {
-                    unlink((string)$destination);
+                if ($destination->exists()) {
+                    $this->fileManager->getPath($destination)->delete();
                 }
             }
         }
